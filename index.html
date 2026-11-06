@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhavra Master — Free Hindi Muhavra Quiz Game</title>
+<meta name="description" content="Muhavra Master ek free Hindi game hai — emojis me chhupe Hindi muhavare pehchano, 1000 levels jeeto, doston ko challenge karo. Bina download, seedha browser me khelo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#1b1035; --bg2:#2d1b4e; --card:#ffffff; --ink:#241536;
+  --brand:#ff8a00; --brand2:#ff3d68; --gold:#ffc531; --ok:#16a34a; --bad:#dc2626;
+  --mut:#6b6280;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Hind',system-ui,sans-serif;color:#f4efff;background:radial-gradient(620px 420px at 12% 8%,rgba(255,138,0,.38),transparent 60%),radial-gradient(720px 520px at 88% 22%,rgba(255,61,104,.32),transparent 60%),radial-gradient(820px 620px at 50% 105%,rgba(64,224,208,.20),transparent 60%),linear-gradient(160deg,#150a2e,#241145 55%,#31175c);background-attachment:fixed;min-height:100vh}
+a{color:var(--gold)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 40px}
+header{position:sticky;top:0;z-index:20;background:rgba(27,16,53,.88);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{max-width:760px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.logo{font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;color:#fff;text-decoration:none}
+.logo span{color:var(--gold)}
+.nav nav{display:flex;gap:14px;font-size:14px}
+.nav nav a{color:#d9d2f2;text-decoration:none;font-weight:600}
+.nav nav a:hover{color:#fff}
+.hero{text-align:center;padding:30px 6px 6px}
+.hero h1{font-family:'Baloo 2',cursive;font-size:clamp(30px,7vw,46px);line-height:1.15;font-weight:800}
+.hero h1 .g{background:linear-gradient(90deg,var(--gold),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#cdc3ee;margin:10px auto 0;max-width:520px;font-size:16px}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.badge{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.ad-slot{margin:18px auto;border:1.5px dashed rgba(255,255,255,.35);border-radius:12px;color:#bdb2e4;text-align:center;padding:14px 10px;font-size:12.5px;letter-spacing:.4px;background:rgba(255,255,255,.03)}
+.card{background:rgba(255,255,255,.74);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.65);color:var(--ink);border-radius:22px;padding:22px;box-shadow:0 24px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.8);margin-top:20px}
+.hidden{display:none!important}
+.btn{font-family:'Baloo 2',cursive;font-weight:700;border:none;cursor:pointer;border-radius:14px;padding:13px 26px;font-size:17px;color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand2));box-shadow:0 8px 20px rgba(255,61,104,.35),inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -8px 14px rgba(255,255,255,.12);transition:transform .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:#efeafd;color:#4c2d95;box-shadow:none}
+.btn.small{padding:9px 16px;font-size:14.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.center{text-align:center}
+.levels{display:grid;gap:12px;margin-top:16px}
+.level{display:flex;align-items:center;gap:14px;border:1.5px solid rgba(124,92,246,.22);border-radius:16px;padding:14px 16px;text-align:left;width:100%;background:rgba(255,255,255,.5);cursor:pointer;font-family:inherit;transition:border-color .15s,transform .12s}
+.level:hover:not(:disabled){border-color:var(--brand);transform:translateY(-1px)}
+.level:disabled{opacity:.55;cursor:not-allowed}
+.level .ic{font-size:30px}
+.level .t{flex:1}
+.level .t b{font-size:17px;display:block}
+.level .t small{color:var(--mut);font-size:13px}
+.level .st{font-weight:700;color:#7c5cd6;font-size:13px;white-space:nowrap}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pill{background:rgba(241,235,255,.75);color:#4c2d95;font-weight:700;border-radius:999px;padding:6px 13px;font-size:14px}
+.pill.score{background:rgba(255,244,214,.8);color:#92600a}
+.hearts{font-size:17px;letter-spacing:2px}
+.timerbar{height:9px;background:#efeafd;border-radius:99px;overflow:hidden;margin:14px 0 4px}
+.timerfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--brand2));width:100%;border-radius:99px;transition:width .2s linear}
+.timerfill.low{background:var(--bad)}
+.qmeta{display:flex;justify-content:space-between;color:var(--mut);font-size:13.5px;font-weight:600}
+.emoji-stage{text-align:center;font-size:clamp(38px,10.5vw,58px);letter-spacing:4px;padding:24px 6px 8px;line-height:1.5;animation:pop .3s ease}
+@keyframes pop{from{transform:scale(.92);opacity:.4}to{transform:scale(1);opacity:1}}
+.qprompt{text-align:center;font-weight:700;font-size:16.5px;color:#4c2d95}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{font-family:inherit;font-size:16.5px;font-weight:600;text-align:left;padding:14px 16px;border-radius:14px;border:2px solid rgba(124,92,246,.20);background:rgba(255,255,255,.5);cursor:pointer;color:var(--ink);transition:all .15s;display:flex;gap:10px;align-items:center}
+.opt .k{background:#e9e2ff;color:#5b3bbd;border-radius:8px;font-weight:800;font-size:13px;padding:2px 8px;flex-shrink:0}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt:disabled{cursor:default}
+.opt.right{background:#e8f9ee;border-color:var(--ok);color:#14532d}
+.opt.right .k{background:var(--ok);color:#fff}
+.opt.wrong{background:#fdecec;border-color:var(--bad);color:#7f1d1d}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.45}
+.tools{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.tool{flex:1;min-width:140px;font-family:inherit;font-weight:700;font-size:14.5px;padding:10px;border-radius:12px;border:2px solid rgba(124,92,246,.20);background:rgba(255,255,255,.55);color:#4c2d95;cursor:pointer}
+.tool:disabled{opacity:.45;cursor:not-allowed}
+.meaning{margin-top:16px;background:#fff8e1;border:1.5px solid #ffe08a;border-radius:14px;padding:14px 16px;font-size:15px}
+.meaning b{color:#92600a}
+.meaning .verdict{font-family:'Baloo 2',cursive;font-size:18px;display:block;margin-bottom:4px}
+.meaning .verdict.ok{color:var(--ok)} .meaning .verdict.bad{color:var(--bad)}
+.nextrow{margin-top:16px;text-align:right}
+.bigscore{font-family:'Baloo 2',cursive;font-size:52px;font-weight:800;color:#4c2d95;line-height:1.1}
+.stars{font-size:34px;letter-spacing:4px;margin:6px 0}
+.statgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:18px 0}
+.stat{background:rgba(255,255,255,.5);border-radius:14px;padding:12px 6px}
+.stat b{font-size:20px;display:block;color:#4c2d95}
+.stat small{color:var(--mut);font-weight:600;font-size:12.5px}
+.share-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+section.info{margin-top:34px}
+section.info h2{font-family:'Baloo 2',cursive;font-size:24px;margin-bottom:10px}
+section.info p,section.info li{color:#d9d2f2;font-size:15.5px;line-height:1.65}
+section.info ul{padding-left:20px}
+.faq{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;margin-top:10px}
+.faq b{color:#fff}
+footer{margin-top:36px;text-align:center;color:#a99cd6;font-size:13.5px;line-height:1.9}
+footer a{color:#cdc3ee}
+
+.lvl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.lvl-btn{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;padding:10px 2px;border-radius:12px;border:1.5px solid rgba(124,92,246,.25);background:rgba(255,255,255,.55);color:#4c2d95;cursor:pointer}
+.lvl-btn:hover:not(:disabled){border-color:var(--brand)}
+.lvl-btn.done{background:linear-gradient(135deg,#ffe9a8,#ffd34d);border-color:#e8b400;color:#6b4e00}
+.lvl-btn.locked{opacity:.45;cursor:not-allowed}
+.lvl-nav{display:flex;gap:8px;align-items:center;margin-top:18px}
+.lvl-nav .tool{flex:1}
+.lvl-nav .pill{flex-shrink:0}
+.music-btn{font-family:inherit;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
+@media (max-width:480px){.card{padding:17px}.statgrid{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a class="logo" href="index.html">👑 Muhavra <span>Master</span></a>
+    <nav>
+      <a href="#kaise-khelein">Kaise Khelein</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <button class="music-btn" id="btn-music" type="button">🔇 Music</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1><span class="g">Muhavra Master</span></h1>
+    <p>Hindi ke mashhoor muhavare ab emojis me chhupe hain. Sahi muhavra pehchano, level jeeto aur doston ko challenge karo — bilkul free, bina download.</p>
+    <div class="badges">
+      <div class="badge">🧩 78 Muhavare</div>
+      <div class="badge">🏆 1000 Levels</div>
+      <div class="badge">📱 Mobile Friendly</div>
+      <div class="badge">🆓 Bilkul Free</div>
+    </div>
+  </div>
+
+  <div class="ad-slot">ADVERTISEMENT<br><small>(AdSense approval ke baad yahan ad code lagega)</small></div>
+
+  <!-- START SCREEN -->
+  <div class="card" id="screen-start">
+    <h2 style="font-family:'Baloo 2',cursive;font-size:22px">🏆 1000 Levels ka safar</h2>
+    <p style="color:var(--mut);margin-top:6px;font-size:15px">Har level me 10 sawal. Level badhega to <b>timer tez, lives kam, sawal mushkil</b> — lekin points bhi zyada! Level 1 par 30 second aur 3 ❤️ milte hain; Level 1000 tak sirf 8 second aur 1 ❤️ bachega.</p>
+    <button class="btn" id="btn-continue" style="width:100%;margin-top:14px">▶ Level 1 Khelo</button>
+    <div class="lvl-nav">
+      <button class="tool" id="pg-prev">⬅ Pichle</button>
+      <span class="pill" id="pg-label">Levels 1–50</span>
+      <button class="tool" id="pg-next">Agle ➡</button>
+    </div>
+    <div class="lvl-grid" id="level-list"></div>
+    <p class="center" style="margin-top:16px;color:var(--mut);font-size:14px">🏅 Tumhara best score: <b id="best-score" style="color:#4c2d95">0</b></p>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="card hidden" id="screen-game">
+    <div class="hud">
+      <div class="pill" id="hud-level">Level 1</div>
+      <div class="hearts" id="hud-hearts">❤️❤️❤️</div>
+      <div class="pill score">⭐ <span id="hud-score">0</span></div>
+    </div>
+    <div class="timerbar"><div class="timerfill" id="timer-fill"></div></div>
+    <div class="qmeta"><span id="q-count">Sawal 1 / 10</span><span id="q-time">⏱ 30s</span><span id="q-streak">🔥 Streak: 0</span></div>
+    <div class="emoji-stage" id="q-emoji">🙂</div>
+    <div class="qprompt">Ye kaun sa muhavra hai?</div>
+    <div class="opts" id="q-opts"></div>
+    <div class="tools">
+      <button class="tool" id="btn-hint">💡 Hint <span id="hint-left"></span></button>
+      <button class="tool" id="btn-fifty">✂️ 50-50 <span id="fifty-left"></span></button>
+      <button class="tool" id="btn-quit">🚪 Chhodo</button>
+    </div>
+    <div class="meaning hidden" id="meaning-box">
+      <span class="verdict" id="verdict"></span>
+      <div id="meaning-text"></div>
+      <div class="nextrow"><button class="btn small" id="btn-next">Agla Sawal ➜</button></div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="card hidden center" id="screen-result">
+    <div style="font-size:44px" id="res-emoji">🏆</div>
+    <h2 style="font-family:'Baloo 2',cursive;font-size:26px" id="res-title">Level Complete!</h2>
+    <div class="stars" id="res-stars">⭐⭐⭐</div>
+    <div class="bigscore"><span id="res-score">0</span></div>
+    <div style="color:var(--mut);font-weight:600">points</div>
+    <div class="statgrid">
+      <div class="stat"><b id="res-right">0</b><small>✔ Sahi Jawab</small></div>
+      <div class="stat"><b id="res-wrong">0</b><small>✖ Galat Jawab</small></div>
+      <div class="stat"><b id="res-best">0</b><small>🏅 Best Score</small></div>
+    </div>
+    <div class="share-row">
+      <button class="btn hidden" id="btn-next-level">Agla Level ➜</button>
+      <button class="btn" id="btn-wa">📲 Score Share Karo</button>
+      <button class="btn ghost" id="btn-again">🔁 Phir Khelo</button>
+      <button class="btn ghost" id="btn-home">🏠 Home</button>
+    </div>
+    <p id="res-next" style="margin-top:14px;color:var(--mut);font-size:14.5px"></p>
+  </div>
+
+  <div class="ad-slot">ADVERTISEMENT<br><small>(AdSense approval ke baad yahan ad code lagega)</small></div>
+
+  <section class="info" id="kaise-khelein">
+    <h2>🎯 Kaise Khelein?</h2>
+    <ul>
+      <li>Screen par kuch emojis dikhenge — unme ek mashhoor <b>Hindi muhavra</b> chhupa hai.</li>
+      <li>4 options me se sahi muhavra chuno. Har sawal ke liye sirf <b>30 second</b> milte hain.</li>
+      <li>Sahi jawab par <b>100 points</b> + jaldi jawab dene par time bonus + lagatar sahi jawabon par streak bonus.</li>
+      <li>Atak gaye? <b>💡 Hint</b> se muhavre ka matlab jaano, ya <b>✂️ 50-50</b> se 2 galat options hatao.</li>
+      <li>Lives khatm = game over. Level pura karo, agla level unlock karo — kul <b>1000 levels</b> hain aur har level pichle se mushkil!</li>
+    </ul>
+  </section>
+
+  <section class="info">
+    <h2>❓ Aam Sawal</h2>
+    <div class="faq"><b>Kya ye game free hai?</b><p>Ha, bilkul free hai. Koi download, koi sign-up nahi — seedha browser me khulta hai.</p></div>
+    <div class="faq"><b>Kya mobile par chalega?</b><p>Ha, ye game mobile, tablet aur computer — teeno par smooth chalta hai.</p></div>
+    <div class="faq"><b>Muhavra seekhne me kaam aayega?</b><p>Bilkul! Har jawab ke baad muhavre ka matlab bhi dikhta hai — khel-khel me 78 muhavare yaad ho jayenge. Students ke liye khaas taur par faydemand.</p></div>
+  </section>
+
+  <footer>
+    © 2026 Muhavra Master · Pyaar se Bharat me banaya gaya 🇮🇳<br>
+    <a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy Policy</a> · Contact: aicreateryes@gmail.com
+  </footer>
+</div>
+
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+<script>
+"use strict";
+/* ============ BANK: asli Hindi muhavare (d = mushkil star 1..3) ============ */
+const BANK = [
+{e:"🐵 ❓ 🫚 👅",a:"बंदर क्या जाने अदरक का स्वाद",d:1,h:"Jo cheez kabhi dekhi hi nahi, uski keemat kya jaanoge?",m:"Jise kisi cheez ka anubhav hi na ho, wo uski asli keemat nahi samajh sakta."},
+{e:"💃 ❓ 🏠 📐",a:"नाच न जाने आँगन टेढ़ा",d:1,h:"Kaam khud nahi aata, ilzaam jagah par!",m:"Apni kamzori chhupane ke liye doosron ya haalaat ko dosh dena."},
+{e:"9️⃣ 2️⃣ 1️⃣1️⃣ 🏃💨",a:"नौ दो ग्यारह होना",d:1,h:"Number bolke bhaag jana!",m:"Chupke se bhaag jana, rafu chakkar hona."},
+{e:"👀 ⭐",a:"आँखों का तारा",d:1,h:"Sabse pyaara, sabse khaas insaan.",m:"Bahut hi priya vyakti, jise sabse zyada pyaar kiya jaye."},
+{e:"🎉 🌙 👀",a:"ईद का चाँद होना",d:1,h:"Bahut dino baad dikhai dene wala.",m:"Bahut samay baad dikhai dena."},
+{e:"📚 🐛",a:"किताबी कीड़ा",d:1,h:"Har waqt padhai me dooba rehne wala.",m:"Har samay padhne me laga rehne wala vyakti."},
+{e:"🏠 🐔 🟰 🍛",a:"घर की मुर्गी दाल बराबर",d:1,h:"Apni hi cheez ki koi kadar nahi.",m:"Apne paas ki keemti cheez ki bhi kadar na karna."},
+{e:"4️⃣ 🌙 ✨",a:"चार चाँद लगाना",d:1,h:"Khoobsurti me aur izafa!",m:"Kisi cheez ki shobha aur badha dena."},
+{e:"👃 ✂️ 😳",a:"नाक कटना",d:1,h:"Izzat par baat aa jaye to?",m:"Izzat chali jana, badnami hona."},
+{e:"🧑‍🌾 🌱 ➡️ 🌾",a:"जैसी करनी वैसी भरनी",d:1,h:"Jo boyega, wahi kaatega.",m:"Jaise karm karoge, vaisa hi phal milega."},
+{e:"👥 🎨",a:"जैसी संगत, वैसी रंगत",d:1,h:"Doston jaisa asar padta hai.",m:"Sangat ka asar vyakti par padta hi hai."},
+{e:"🙏 ✨",a:"कर भला, तो हो भला",d:1,h:"Bhalai ka badla bhalai milti hai.",m:"Jo doosron ka bhala karta hai, uska bhi bhala hota hai."},
+{e:"👄 💧 😋",a:"मुँह में पानी आना",d:1,h:"Swaadisht dekh kar lalach.",m:"Kisi cheez ko dekhkar lalach hona."},
+{e:"🍲 ⚫ 🤔",a:"दाल में कुछ काला है",d:1,h:"Kuch gadbad zaroor hai.",m:"Kuch sandehjanak baat hona."},
+{e:"👍 🚫",a:"अँगूठा दिखाना",d:1,h:"Saaf inkaar kar dena.",m:"Madad ya baat se saaf mana kar dena."},
+{e:"👄 🎈 😤",a:"मुँह फुलाना",d:1,h:"Chhoti baat par naarazgi.",m:"Naaraz hokar rooth jana."},
+{e:"🧠 🏆",a:"मन के हारे हार है, मन के जीते जीत",d:1,h:"Sab kuch hausle par hai.",m:"Safalta aur asafalta man ki sthiti par nirbhar karti hai."},
+{e:"🧠 🍽️ 😩",a:"दिमाग खाना",d:1,h:"Baaton se pareshan kar dena.",m:"Zyada bolkar ya baar-baar sawal karke tang karna."},
+{e:"👂 🗣️ 🤫",a:"कान भरना",d:2,h:"Kisi ke khilaf chupke se bhadkana.",m:"Kisi ke viruddh baatein karke use bhadkana (chugli karna)."},
+{e:"🥷 🧔 🌾",a:"चोर की दाढ़ी में तिनका",d:2,h:"Galti karne wala khud hi ghabraya rehta hai.",m:"Aparadhi apni chhoti si galti par bhi khud ko doshi mehsoos karta hai."},
+{e:"🏪 ⬆️ 🍲 😖",a:"ऊँची दुकान फीका पकवान",d:2,h:"Naam bada, kaam chhota!",m:"Dikhaava bahut, lekin asal quality kam."},
+{e:"🐘 🦷 🍽️ 🙈",a:"हाथी के दाँत खाने के और, दिखाने के और",d:2,h:"Dikhaava kuch aur, asaliyat kuch aur.",m:"Jo dikhaya jata hai wo asal se alag hota hai; dohra vyavhaar."},
+{e:"👄 🙏 🔪",a:"मुँह में राम बगल में छुरी",d:2,h:"Saamne meetha, peeche dhokha.",m:"Upar se dost/mitrabhaavi, andar se dushman."},
+{e:"🔄 🥷 👮 😠",a:"उल्टा चोर कोतवाल को डाँटे",d:2,h:"Galti khud ki, chillana doosre par!",m:"Apni galti hone par bhi doosre ko doshi thahrana."},
+{e:"🧺 🐶 ❌ 🏠 ❌ 🌊",a:"धोबी का कुत्ता, न घर का न घाट का",d:2,h:"Na idhar ka, na udhar ka.",m:"Jo kahin ka bhi na rahe; dono taraf se haani."},
+{e:"👏 1️⃣ ✋ ❌",a:"एक हाथ से ताली नहीं बजती",d:2,h:"Jhagda ya kaam — akele se nahi hota.",m:"Koi bhi kaam ya vivaad akele ek paksh se nahi hota, dono ki bhagidari hoti hai."},
+{e:"🔥 🧈 🫗",a:"आग में घी डालना",d:2,h:"Gussa aur badha dene wala kaam.",m:"Bhadki hui sthiti ko aur bigaad dena."},
+{e:"💨 🗣️ 💭",a:"हवा में बातें करना",d:2,h:"Bina sir-pair ki badi-badi baatein.",m:"Niradhaar, khayali baatein karna."},
+{e:"☀️ ⭐ 👀",a:"दिन में तारे दिखना",d:2,h:"Zor ki chot ya hairani par dikhta hai!",m:"Bahut zyada hairan ya pareshan ho jana."},
+{e:"🥛 ⚖️ 💧",a:"दूध का दूध, पानी का पानी",d:2,h:"Insaaf me sab saaf-saaf ho jata hai.",m:"Sach aur jhooth ka bilkul spasht faisla ho jana."},
+{e:"🐱 🔔 ❓",a:"बिल्ली के गले में घंटी बाँधना",d:2,h:"Yojna sab banate hain, karega kaun?",m:"Khatarnaak kaam karne ke liye koi aage na aana."},
+{e:"🫃 🐭 🏃",a:"पेट में चूहे दौड़ना",d:2,h:"Zor ki bhookh lagne par hota hai!",m:"Bahut tez bhookh lagna."},
+{e:"🌱 ⛰️ 🤏",a:"राई का पहाड़ बनाना",d:2,h:"Chhoti baat ko bada bana dena.",m:"Chhoti si baat ko bahut bada karke pesh karna."},
+{e:"🦶 🪓 💥",a:"अपने पैर पर कुल्हाड़ी मारना",d:2,h:"Khud hi apne nuksaan ka kaaran banna.",m:"Jaankari me khud apna nuksaan karna."},
+{e:"👀 😠",a:"आँखें दिखाना",d:2,h:"Gusse se dhamkana.",m:"Gussa dikhakar darana ya dhamkana."},
+{e:"🤲 😞",a:"हाथ मलना",d:2,h:"Mauka jaane ke baad pachhtana.",m:"Avsar kho dene par pachhtana."},
+{e:"💧 💧 😳",a:"पानी-पानी होना",d:2,h:"Itni sharm ki chhupna pad jaye.",m:"Bahut adhik sharminda hona."},
+{e:"🐪 👄 🌿",a:"ऊँट के मुँह में जीरा",d:2,h:"Badi zaroorat, mili bohot kam cheez.",m:"Bahut badi aavashyakta ke saamne bahut kam milna."},
+{e:"⛏️ ⛰️ 🐭",a:"खोदा पहाड़, निकली चुहिया",d:2,h:"Mehnat bohot, nateeja bohot chhota.",m:"Bahut parishram ke baad bahut mamuli phal milna."},
+{e:"🦷 🍋 😖",a:"दाँत खट्टे करना",d:2,h:"Mukkaable me buri tarah harana.",m:"Vipakshi ko buri tarah parajit karna."},
+{e:"👃 😤",a:"नाक में दम करना",d:2,h:"Itna tang karna ki saans mushkil.",m:"Bahut zyada pareshan kar dena."},
+{e:"👀 🌫️ 🤥",a:"आँखों में धूल झोंकना",d:2,h:"Saamne hi dhokha de dena.",m:"Dhokha dekar sach chhupa lena."},
+{e:"🚪 🏃 💨",a:"पीठ दिखाना",d:2,h:"Maujoodgi se bhaag khade hona.",m:"Dar kar bhaag jana, saamna na karna."},
+{e:"🩸 😡",a:"खून का प्यासा",d:2,h:"Sabse bada jaani dushman.",m:"Kattar shatru, jaan lene par utaaru."},
+{e:"🤥 🦶 ❌",a:"झूठ के पाँव नहीं होते",d:2,h:"Jhooth zyada din chhupta nahi.",m:"Jhooth adhik samay tak nahi tikta, pakda jata hai."},
+{e:"🤲 🌊",a:"नेकी कर, दरिया में डाल",d:2,h:"Bhalai karke bhool jana chahiye.",m:"Bhalai karke uska badla ya prachaar na chahna."},
+{e:"☝️ 🧈 ❌",a:"सीधी उँगली से घी नहीं निकलता",d:2,h:"Seedha tareeka kaam na kare to?",m:"Jahan seedha tareeka kaam na kare, wahan tedha upaay apnana padta hai."},
+{e:"🐴 💰 😴",a:"घोड़े बेचकर सोना",d:2,h:"Bilkul befikr hokar sona.",m:"Sab chinta chhodkar aaram se sona."},
+{e:"🍲 🚫 😏",a:"दाल न गलना",d:2,h:"Chaalaaki yahan nahi chalegi.",m:"Kisi ke saamne daav ya chaal safal na hona."},
+{e:"🎗️ 💪",a:"कमर कसना",d:2,h:"Kaam ke liye poori taiyaari.",m:"Kisi kaam ke liye poori tarah taiyaar ho jana."},
+{e:"☝️ 😠",a:"उँगली उठाना",d:2,h:"Kisi par aarop lagana.",m:"Kisi par dosh ya aarop lagana."},
+{e:"☀️ 📈 🌙 📈",a:"दिन दूनी, रात चौगुनी तरक्की",d:2,h:"Bohot tez aage badhna.",m:"Bahut tezi se unnati karna."},
+{e:"🐍 💀 🪵 ✅",a:"साँप भी मर जाए और लाठी भी न टूटे",d:3,h:"Kaam bhi ho jaye, nuksaan bhi na ho.",m:"Bina apna nuksaan kiye kaam nikaal lena."},
+{e:"🥇 ✨ 💍",a:"सोने पे सुहागा",d:3,h:"Achhi cheez aur achhi ho jaye.",m:"Pehle se achhi cheez ka aur behtar ho jana."},
+{e:"🎩 🦯 👑",a:"अंधों में काना राजा",d:3,h:"Jahan sab naasamajh, wahan thoda samajhdaar bhi bada.",m:"Murkhon ke beech thodi si buddhi wala bhi mahaan maana jata hai."},
+{e:"🍯 🔪",a:"मीठी छुरी",d:3,h:"Meethi baaton me chhupa dhokha.",m:"Meethi baaton se dhokha dene wala vyakti."},
+{e:"🦉 ➖ 🎯",a:"अपना उल्लू सीधा करना",d:3,h:"Sirf apna matlab nikaalna.",m:"Doosron ki parwah kiye bina apna swarth siddh karna."},
+{e:"🛢️ 👀",a:"तेल देखो, तेल की धार देखो",d:3,h:"Kaam parkh kar, soch-samajh kar karo.",m:"Koi kaam karne se pehle uski asal sthiti achhi tarah jaanchna."},
+{e:"🫀 🐍 😖",a:"छाती पर साँप लोटना",d:3,h:"Kisi ki tarakki dekh kar jalan.",m:"Doosre ki safalta dekhkar bahut jalan hona."},
+{e:"➖ 🧎",a:"लकीर का फकीर",d:3,h:"Purani reet par bina soche chalna.",m:"Bina soche-samjhe purani parampara par chalte rehna."},
+{e:"🙌 🧼 😔",a:"हाथ धो बैठना",d:3,h:"Ummeed hi chhod dena.",m:"Kisi cheez ki aasha poori tarah chhod dena."},
+{e:"👂 🐜 🚫",a:"कानों पर जूँ तक न रेंगना",d:3,h:"Baar-baar kehne par bhi koi asar nahi.",m:"Kehne-sunne ka bilkul asar na hona."},
+{e:"🍲 👨‍🍳 🚪",a:"अपनी खिचड़ी अलग पकाना",d:3,h:"Sabse alag apna alag raag.",m:"Sabse alag rehkar sirf apna kaam karna."},
+{e:"💇 🔍",a:"बाल की खाल निकालना",d:3,h:"Chhoti baat me bhi nukta-cheeni.",m:"Har baat me bareeki se dosh nikaalna."},
+{e:"🥁 🔭 ✨",a:"दूर के ढोल सुहावने लगते हैं",d:3,h:"Door se har cheez achhi lagti hai.",m:"Door ki cheez hamesha zyada aakarshak lagti hai."},
+{e:"🌑 🏙️ 👑",a:"अंधेर नगरी, चौपट राजा",d:3,h:"Jahan koi vyavastha hi na ho.",m:"Anyay aur avyavastha se bhara shasan."},
+{e:"🍮 📐 😬",a:"टेढ़ी खीर",d:3,h:"Ye kaam aasan nahi hai.",m:"Bahut mushkil kaam."},
+{e:"☁️ ⬇️ 🌴",a:"आसमान से गिरा, खजूर में अटका",d:3,h:"Ek musibat se nikla, dusri me phansa.",m:"Ek sankat se nikalte hi doosre sankat me pad jana."},
+{e:"📜 🔓",a:"कच्चा चिट्ठा खोलना",d:3,h:"Chhupa raaz sabke saamne.",m:"Kisi ke chhupe raaz ya sach ko khol dena."},
+{e:"🖐️ 🧈 😎",a:"पाँचों उँगलियाँ घी में होना",d:3,h:"Chaaron or se sirf fayda.",m:"Har taraf se laabh hi laabh hona."},
+{e:"🏠 💥 💰",a:"छप्पर फाड़कर देना",d:3,h:"Bina ummeed dher saara milna.",m:"Bhagwan ka achanak bahut adhik dena."},
+{e:"🤲 🌱 ⏰",a:"हथेली पर सरसों जमाना",d:3,h:"Har kaam turant chahne wala.",m:"Asambhav roop se jaldi parinaam chahna."},
+{e:"🥤 💧 😳",a:"चुल्लू भर पानी में डूब मरना",d:3,h:"Itni sharm ki baat.",m:"Bahut sharminda hone wali baat."},
+{e:"🐶 🦁 🏘️",a:"अपनी गली में कुत्ता भी शेर होता है",d:3,h:"Apne ilaake me sab sher.",m:"Apne kshetra me kamzor bhi takatwar banta hai."},
+{e:"🏠 🗣️ 🔥",a:"घर का भेदी लंका ढाए",d:3,h:"Ghar ka raazdaar sabse khatarnaak.",m:"Apna hi aadmi raaz kholkar sabse zyada nuksaan pahuncha sakta hai."},
+{e:"✋ 💍 🪞",a:"हाथ कंगन को आरसी क्या",d:3,h:"Jo saamne hai use saboot kya.",m:"Spasht cheez ke liye praman ki zaroorat nahi."},
+{e:"💸 🚫 😖",a:"चमड़ी जाए पर दमड़ी न जाए",d:3,h:"Jaan se zyada paisa pyaara.",m:"Atyant kanjoos hona."},
+{e:"👀 🌵",a:"आँख का काँटा होना",d:3,h:"Jo dikhe hi na bhaaye.",m:"Bahut naapasand vyakti, jise dekhna bhi na suhaaye."}
+];
+
+/* ============ LEVEL SYSTEM: 1..1000, mushkil badhti jayegi ============ */
+const MAX_LEVEL = 1000, PER_PAGE = 50, QS_PER_LEVEL = 10;
+function levelParams(n){
+  return {
+    time: Math.max(8, 30 - Math.floor((n-1)/45)),          // 30s -> 8s
+    hearts: n < 350 ? 3 : (n < 750 ? 2 : 1),                 // lives kam
+    hints: n < 500 ? 2 : 1,                                  // lifelines kam
+    fifties: n < 600 ? 1 : 0,
+    mult: 1 + Math.floor((n-1)/100),                         // points x1..x10
+    targetD: 1 + ((n-1)/(MAX_LEVEL-1))*2                     // sawal mushkil hote jayenge
+  };
+}
+
+/* ============ STATE ============ */
+const $ = id => document.getElementById(id);
+const LS = { get:(k,d)=>{ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v);}catch(e){return d;} }, set:(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+let unlocked = LS.get("em2_unlocked", 1);
+let starsMap = LS.get("em2_stars", {});
+let best = LS.get("em_best", 0);
+let pageStart = Math.floor((unlocked-1)/PER_PAGE)*PER_PAGE + 1;
+let G = null, timerId = null;
+
+function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
+
+function showScreen(name){
+  ["start","game","result"].forEach(s=>$("screen-"+s).classList.toggle("hidden", s!==name));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderHome(){
+  $("best-score").textContent = best;
+  const cont = $("btn-continue");
+  cont.textContent = unlocked > MAX_LEVEL ? "👑 Saare 1000 Levels Jeet Liye! Phir Khelo — Level 1" : "▶ Level " + unlocked + " Khelo";
+  cont.onclick = ()=> startLevel(unlocked > MAX_LEVEL ? 1 : unlocked);
+  const grid = $("level-list"); grid.innerHTML = "";
+  const end = Math.min(pageStart + PER_PAGE - 1, MAX_LEVEL);
+  $("pg-label").textContent = "Levels " + pageStart + "–" + end;
+  $("pg-prev").disabled = pageStart <= 1;
+  $("pg-next").disabled = end >= MAX_LEVEL;
+  for(let n = pageStart; n <= end; n++){
+    const b = document.createElement("button");
+    const st = starsMap[n] || 0;
+    b.className = "lvl-btn" + (st ? " done" : "") + (n > unlocked ? " locked" : "");
+    b.textContent = n > unlocked ? "🔒" : (st ? n + " ⭐" + st : "" + n);
+    b.disabled = n > unlocked;
+    b.onclick = ()=> startLevel(n);
+    grid.appendChild(b);
+  }
+}
+$("pg-prev").onclick = ()=>{ pageStart = Math.max(1, pageStart - PER_PAGE); renderHome(); };
+$("pg-next").onclick = ()=>{ pageStart = Math.min(MAX_LEVEL, pageStart + PER_PAGE); renderHome(); };
+
+function pickQuestions(n){
+  const P = levelParams(n);
+  const weighted = BANK.map(q=>({ q, w: Math.pow(4 - Math.abs(q.d - P.targetD), 3) * (0.85 + Math.random()*0.3) }));
+  const picked = [];
+  const pool = weighted.slice();
+  while(picked.length < QS_PER_LEVEL && pool.length){
+    let sum = pool.reduce((s,x)=>s+x.w,0), r = Math.random()*sum, idx = 0;
+    while(r > pool[idx].w){ r -= pool[idx].w; idx++; }
+    picked.push(pool.splice(idx,1)[0].q);
+  }
+  return picked.map(q=>{
+    const near = BANK.filter(x=>x.a !== q.a).sort((x,y)=> Math.abs(x.d-q.d) - Math.abs(y.d-q.d)).slice(0,9);
+    const dis = shuffle(near).slice(0,3).map(x=>x.a);
+    return { ...q, opts: shuffle([q.a, ...dis]) };
+  });
+}
+
+function startLevel(n){
+  const P = levelParams(n);
+  G = { lvl: n, P, qs: pickQuestions(n), i: 0, score: 0, hearts: P.hearts, maxHearts: P.hearts, right: 0, wrong: 0, streak: 0, hints: P.hints, fifties: P.fifties, locked: false, timeLeft: P.time };
+  showScreen("game");
+  renderQ();
+}
+
+function startTimer(){
+  clearInterval(timerId);
+  G.timeLeft = G.P.time;
+  tickUI();
+  timerId = setInterval(()=>{
+    G.timeLeft -= 0.2;
+    if(G.timeLeft <= 0){ G.timeLeft = 0; tickUI(); clearInterval(timerId); onTimeout(); return; }
+    tickUI();
+  }, 200);
+}
+function tickUI(){
+  const pct = Math.max(0, G.timeLeft/G.P.time*100);
+  const f = $("timer-fill"); f.style.width = pct + "%"; f.classList.toggle("low", G.timeLeft <= 6);
+  $("q-time").textContent = "⏱ " + Math.ceil(G.timeLeft) + "s";
+}
+function heartsUI(){ $("hud-hearts").textContent = "❤️".repeat(Math.max(0,G.hearts)) + "🖤".repeat(Math.max(0, G.maxHearts - G.hearts)); }
+
+function renderQ(){
+  const q = G.qs[G.i];
+  G.locked = false;
+  $("hud-level").textContent = "Level " + G.lvl + (G.P.mult > 1 ? " · x" + G.P.mult + " pts" : "");
+  heartsUI();
+  $("hud-score").textContent = G.score;
+  $("q-count").textContent = "Sawal " + (G.i+1) + " / " + G.qs.length;
+  $("q-streak").textContent = "🔥 Streak: " + G.streak;
+  $("q-emoji").textContent = q.e;
+  $("meaning-box").classList.add("hidden");
+  $("meaning-box").dataset.mode = "";
+  $("hint-left").textContent = "(" + G.hints + " bache)";
+  $("btn-hint").disabled = G.hints <= 0;
+  const fb = $("btn-fifty"); fb.disabled = G.fifties <= 0; $("fifty-left").textContent = "(" + G.fifties + " bacha)";
+  const keys = ["A","B","C","D"];
+  const box = $("q-opts"); box.innerHTML = "";
+  q.opts.forEach((opt, k)=>{
+    const b = document.createElement("button");
+    b.className = "opt"; b.dataset.opt = opt;
+    b.innerHTML = `<span class="k">${keys[k]}</span><span>${opt}</span>`;
+    b.onclick = ()=> answer(b, opt);
+    box.appendChild(b);
+  });
+  startTimer();
+}
+
+function lockOpts(){ [...$("q-opts").children].forEach(b=> b.disabled = true); }
+
+function showMeaning(ok, title){
+  $("meaning-box").dataset.mode = "";
+  const q = G.qs[G.i];
+  $("verdict").textContent = title;
+  $("verdict").className = "verdict " + (ok ? "ok" : "bad");
+  $("meaning-text").innerHTML = `<b>${q.a}</b> — ${q.m}`;
+  $("btn-next").textContent = (G.i === G.qs.length-1 || G.hearts <= 0) ? "Result Dekho 🏁" : "Agla Sawal ➜";
+  $("meaning-box").classList.remove("hidden");
+}
+
+function answer(btn, opt){
+  if(G.locked) return; G.locked = true; clearInterval(timerId); lockOpts();
+  const q = G.qs[G.i];
+  if(opt === q.a){
+    const gained = (100 + Math.ceil(G.timeLeft)*2 + (G.streak+1 >= 3 ? 50 : 0)) * G.P.mult;
+    G.streak++; G.score += gained; G.right++;
+    btn.classList.add("right");
+    showMeaning(true, "🎉 Sahi Jawab! +" + gained + " points");
+  } else {
+    G.hearts--; G.wrong++; G.streak = 0;
+    btn.classList.add("wrong");
+    [...$("q-opts").children].forEach(b=>{ if(b.dataset.opt === q.a) b.classList.add("right"); else if(b !== btn) b.classList.add("dim"); });
+    showMeaning(false, "😅 Galat! Ek ❤️ gaya");
+  }
+  heartsUI(); $("hud-score").textContent = G.score; $("q-streak").textContent = "🔥 Streak: " + G.streak;
+}
+
+function onTimeout(){
+  if(G.locked) return; G.locked = true; lockOpts();
+  const q = G.qs[G.i];
+  G.hearts--; G.wrong++; G.streak = 0;
+  [...$("q-opts").children].forEach(b=>{ if(b.dataset.opt === q.a) b.classList.add("right"); else b.classList.add("dim"); });
+  showMeaning(false, "⏰ Time Khatm! Ek ❤️ gaya");
+  heartsUI();
+}
+
+$("btn-hint").onclick = ()=>{
+  if(!G || G.locked || G.hints <= 0) return;
+  G.hints--; $("btn-hint").disabled = G.hints <= 0; $("hint-left").textContent = "(" + G.hints + " bache)";
+  $("verdict").textContent = "💡 Hint"; $("verdict").className = "verdict";
+  $("meaning-text").innerHTML = G.qs[G.i].h;
+  $("btn-next").textContent = "Samajh Gaya 👍";
+  $("meaning-box").classList.remove("hidden");
+  $("meaning-box").dataset.mode = "hint";
+};
+$("btn-fifty").onclick = ()=>{
+  if(!G || G.locked || G.fifties <= 0) return;
+  G.fifties--; $("btn-fifty").disabled = true; $("fifty-left").textContent = "(0 bacha)";
+  const q = G.qs[G.i];
+  const wrongs = [...$("q-opts").children].filter(b=> b.dataset.opt !== q.a);
+  shuffle(wrongs).slice(0,2).forEach(b=>{ b.style.visibility = "hidden"; });
+};
+$("btn-quit").onclick = ()=>{ clearInterval(timerId); finishGame(true); };
+$("btn-next").onclick = ()=>{
+  if($("meaning-box").dataset.mode === "hint"){ $("meaning-box").classList.add("hidden"); $("meaning-box").dataset.mode = ""; return; }
+  G.i++;
+  if(G.hearts <= 0 || G.i >= G.qs.length){ finishGame(false); } else { renderQ(); }
+};
+
+function finishGame(quit){
+  clearInterval(timerId);
+  const completed = !quit && G.hearts > 0 && G.i >= G.qs.length;
+  const total = G.right + G.wrong;
+  let starCount = 0;
+  if(completed){
+    const acc = total ? G.right/total : 0;
+    starCount = acc >= 0.9 ? 3 : acc >= 0.6 ? 2 : 1;
+    if(starCount > (starsMap[G.lvl] || 0)){ starsMap[G.lvl] = starCount; LS.set("em2_stars", starsMap); }
+    if(G.lvl >= unlocked && G.lvl < MAX_LEVEL){ unlocked = G.lvl + 1; LS.set("em2_unlocked", unlocked); }
+    else if(G.lvl >= unlocked && G.lvl >= MAX_LEVEL){ unlocked = MAX_LEVEL + 1; LS.set("em2_unlocked", unlocked); }
+  }
+  if(G.score > best){ best = G.score; LS.set("em_best", best); }
+  $("res-emoji").textContent = completed ? "🏆" : (quit ? "👋" : "💔");
+  $("res-title").textContent = completed ? "Level " + G.lvl + " Complete!" : (quit ? "Game Chhoda" : "Game Over!");
+  $("res-stars").textContent = "⭐".repeat(starCount) + "☆".repeat(3-starCount);
+  $("res-score").textContent = G.score;
+  $("res-right").textContent = G.right; $("res-wrong").textContent = G.wrong; $("res-best").textContent = best;
+  const nx = $("btn-next-level");
+  if(completed && G.lvl < MAX_LEVEL){ nx.classList.remove("hidden"); nx.textContent = "Level " + (G.lvl+1) + " Khelo ➜"; nx.onclick = ()=> startLevel(G.lvl+1); }
+  else { nx.classList.add("hidden"); }
+  $("res-next").textContent = completed && G.lvl < MAX_LEVEL ? "🎉 Level " + (G.lvl+1) + " unlock ho gaya! Dhyaan rahe — aage timer aur tez, sawal aur mushkil honge." : (completed ? "👑 Tumne Level 1000 bhi jeet liya! Tum asli Muhavra Master ho!" : "Koi baat nahi — phir koshish karo, muhavare yaad ho jayenge!");
+  showScreen("result");
+  renderHome();
+}
+
+$("btn-again").onclick = ()=> startLevel(G.lvl);
+$("btn-home").onclick = ()=> showScreen("start");
+$("btn-wa").onclick = ()=>{
+  const msg = `😀 Maine Muhavra Master game me Level ${G.lvl} par ${G.score} points banaye! Kya tum mujhse aage nikal sakte ho? 1000 levels ka challenge 👉 ` + location.href;
+  window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+};
+
+/* ============ BACKGROUND MUSIC (original, copyright-free) ============ */
+const bgm = $("bgm");
+let musicOn = LS.get("em_music", true), musicStarted = false;
+function musicUI(){ $("btn-music").textContent = musicOn ? "🔊 Music" : "🔇 Music"; }
+function musicStart(){
+  if(musicStarted) return; musicStarted = true;
+  bgm.volume = 0.3;
+  if(musicOn){ bgm.play().catch(()=>{}); }
+}
+document.addEventListener("pointerdown", musicStart);
+$("btn-music").onclick = (e)=>{
+  e.stopPropagation();
+  musicOn = !musicOn; LS.set("em_music", musicOn);
+  if(musicOn){ musicStarted = true; bgm.volume = 0.3; bgm.play().catch(()=>{}); }
+  else { bgm.pause(); }
+  musicUI();
+};
+musicUI();
+
+renderHome();
+</script>
+</body>
+</html>
